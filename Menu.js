@@ -48,9 +48,7 @@ class Menu {
         labels.push(label);
         var menuListe = document.getElementById('listeItem');
         let li = document.createElement("li");
-        li.innerText = label; // Ajout du texte dans l'item 
-        console.log(menuListe);  
-        console.log(labels.length-1);  
+        li.innerText = label; // Ajout du texte dans l'item  
         li.onclick = function () { // Ajout du gestion de click sur l'item
             eventClicked(labels.length-1);
         };
@@ -74,7 +72,6 @@ setTimeout(() => menu.setEsp(100).setDisp(1).addItem('Test'), 5000);
     Fonction qui crée la liste
 ------------------------------------------------------------------- */
 function createListe() {
-    console.log('createListe appeler');
     // Création de la liste 
     var HTMLUListElement = document.createElement("ul");
     HTMLUListElement.setAttribute('id', 'listeItem');
@@ -97,11 +94,11 @@ function createListe() {
     Fonction qui gere le clique sur un item
 ------------------------------------------------------------------- */
 function eventClicked(index) {
-    const event = new CustomEvent('menu_click', {// Ajout d'un évenement custom
+    const evt = new CustomEvent('menu_click', {// Ajout d'un évenement custom
         detail: {
             index: index
         }
     });
     var listeDev = document.getElementById('listeItem');
-    listeDev.dispatchEvent(event);// On diffuse l'évènement 
+    listeDev.dispatchEvent(evt);// On diffuse l'évènement 
 }
