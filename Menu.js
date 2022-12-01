@@ -30,7 +30,6 @@ class Menu {
         Méthode qui définie l'orientation du menu.
     ------------------------------------------------------------------- */
     setDisp(dispCall) {
-        // 
         var menuListe = document.getElementById('listeItem');
         if (dispCall == 0) {
             menuListe.style.flexDirection = "row";
@@ -43,9 +42,14 @@ class Menu {
         Méthode qui ajoute un item à la suite des autres.
     ------------------------------------------------------------------- */
     addItem(label) {
-        labels.push(label);
+        // labels.push(label);
         var menuListe = document.getElementById('listeItem');
-        console.log(labels);
+        let li = document.createElement("li");
+        li.innerText = label; // Ajout du texte dans l'item   
+        li.onclick = function () { // Ajout du gestion de click sur l'item
+            // eventClicked(label);
+        };
+        menuListe.appendChild(li); // Ajout de l'item dans la liste
     }
 }
 const out = document.getElementById('content');
@@ -55,9 +59,7 @@ const out = document.getElementById('content');
 let labels = ["Accueil", "Produits", "Contact"];
 let menu = new Menu(labels);
 let menuObj = menu.getObjDOM();
-console.log(menuObj);
-// menuObj.addEventListener('menu_click', evt => console.log(`Clic sur ${labels[evt.detail.index]}`));  
-menuObj.addEventListener('menu_click', evt => console.log(`Clic sur ${[evt.detail.index]}`));
+menuObj.addEventListener('menu_click', evt => console.log(`Clic sur ${labels[evt.detail.index]}`));  
 out.appendChild(menuObj);
 setTimeout(() => menu.setEsp(100).setDisp(1).addItem('Test'), 5000);
 /* ----------------------------------------------------------------
@@ -70,30 +72,31 @@ function createListe() {
     HTMLUListElement.setAttribute('id', 'listeItem');
     HTMLUListElement.style.listStyle = "none";
     HTMLUListElement.style.display = "flex";
-    // Ajout des items dans la liste
-    labels.forEach(index => {
-        // Création de l'item de la liste
-        let li = document.createElement("li");
-        // Ajout du texte dans l'item   
-        li.innerText = index;
-        // Ajout du gestion de click sur l'item
-        li.onclick = function () {
-            eventClicked(index);
+    let i = 0;
+    for (let index = 0; index < labels.length; index++) {// Ajout des items dans la liste
+        let li = document.createElement("li");// Création de l'item de la liste
+        li.innerText = labels[index];// Ajout du texte dans l'item
+        li.onclick = function () {// Ajout du gestion de click sur l'item
+            const event = new CustomEvent('menu_click', {// Ajout d'un évenement custom
+                detail: {
+                    index: index
+                }
+            });
+            var listeDev = document.getElementById('listeItem');
+            listeDev.dispatchEvent(event);// On diffuse l'évènement 
         };
-        // Ajout de l'item dans la liste
         HTMLUListElement.appendChild(li);
-    });
+    }
     var navContainer = document.querySelector(".navMenu");
-    navContainer.appendChild(HTMLUListElement);
-    //Renvoie la liste d'élément encapsulé
-    return HTMLUListElement;
+    navContainer.appendChild(HTMLUListElement);// Ajout de l'item dans la liste
+    return HTMLUListElement;//Renvoie la liste d'élément encapsulé
 }
-
 /* ----------------------------------------------------------------
     Fonction qui gere le clique sur un item
 ------------------------------------------------------------------- */
 function eventClicked(index) {
     // Ajout de l'evénement
+    console.log(index + "= Index")
     const event = new CustomEvent('menu_click', {
         detail: {
             index: index
