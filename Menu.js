@@ -17,6 +17,7 @@ class Menu {
     getObjDOM() {
         return createListe();
     }
+
     /* ----------------------------------------------------------------
         Méthode qui modifie l’espacement entre les items.
     ------------------------------------------------------------------- */
@@ -26,6 +27,7 @@ class Menu {
         menuListe.style.rowGap = espCall + "px";
         return this;
     }
+
     /* ----------------------------------------------------------------
         Méthode qui définie l'orientation du menu.
     ------------------------------------------------------------------- */
@@ -38,21 +40,26 @@ class Menu {
         }
         return this;
     }
+
     /* ----------------------------------------------------------------
         Méthode qui ajoute un item à la suite des autres.
     ------------------------------------------------------------------- */
     addItem(label) {
-        // labels.push(label);
+        labels.push(label);
         var menuListe = document.getElementById('listeItem');
         let li = document.createElement("li");
-        li.innerText = label; // Ajout du texte dans l'item   
+        li.innerText = label; // Ajout du texte dans l'item 
+        console.log(menuListe);  
+        console.log(labels.length-1);  
         li.onclick = function () { // Ajout du gestion de click sur l'item
-            // eventClicked(label);
+            eventClicked(labels.length-1);
         };
         menuListe.appendChild(li); // Ajout de l'item dans la liste
+        return this;
     }
 }
 const out = document.getElementById('content');
+
 /* ----------------------------------------------------------------
     Vérification du fonctionnement du composant Menu
 ------------------------------------------------------------------- */
@@ -62,6 +69,7 @@ let menuObj = menu.getObjDOM();
 menuObj.addEventListener('menu_click', evt => console.log(`Clic sur ${labels[evt.detail.index]}`));  
 out.appendChild(menuObj);
 setTimeout(() => menu.setEsp(100).setDisp(1).addItem('Test'), 5000);
+
 /* ----------------------------------------------------------------
     Fonction qui crée la liste
 ------------------------------------------------------------------- */
@@ -72,18 +80,11 @@ function createListe() {
     HTMLUListElement.setAttribute('id', 'listeItem');
     HTMLUListElement.style.listStyle = "none";
     HTMLUListElement.style.display = "flex";
-    let i = 0;
     for (let index = 0; index < labels.length; index++) {// Ajout des items dans la liste
         let li = document.createElement("li");// Création de l'item de la liste
         li.innerText = labels[index];// Ajout du texte dans l'item
         li.onclick = function () {// Ajout du gestion de click sur l'item
-            const event = new CustomEvent('menu_click', {// Ajout d'un évenement custom
-                detail: {
-                    index: index
-                }
-            });
-            var listeDev = document.getElementById('listeItem');
-            listeDev.dispatchEvent(event);// On diffuse l'évènement 
+            eventClicked(index);
         };
         HTMLUListElement.appendChild(li);
     }
@@ -91,18 +92,16 @@ function createListe() {
     navContainer.appendChild(HTMLUListElement);// Ajout de l'item dans la liste
     return HTMLUListElement;//Renvoie la liste d'élément encapsulé
 }
+
 /* ----------------------------------------------------------------
     Fonction qui gere le clique sur un item
 ------------------------------------------------------------------- */
 function eventClicked(index) {
-    // Ajout de l'evénement
-    console.log(index + "= Index")
-    const event = new CustomEvent('menu_click', {
+    const event = new CustomEvent('menu_click', {// Ajout d'un évenement custom
         detail: {
             index: index
         }
     });
     var listeDev = document.getElementById('listeItem');
-    // On diffuse l'évènement    
-    listeDev.dispatchEvent(event);
+    listeDev.dispatchEvent(event);// On diffuse l'évènement 
 }
